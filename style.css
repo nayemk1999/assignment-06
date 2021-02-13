@@ -5,6 +5,13 @@
   margin: 0 auto;
   position: relative;
 }
+.error{
+  padding: 20px;
+  margin-top: 70px;
+  border-radius: 15px;
+  font-size: 30px;
+  font-weight: bold;
+}
 
 .gallery-header {
   display: none;

@@ -24,15 +24,31 @@ const showImages = (images) => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
-    gallery.appendChild(div)
+    gallery.appendChild(div);
+
   });
+  toggleBtn();
 }
 
 const getImages = query => {
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
-    .then(response => response.json())
-    .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
+  //check search Value
+  if (query == '') {
+    document.getElementById('error-message').style.display = 'block';
+  } else {
+    document.getElementById('error-message').style.display = 'none';
+    const url = `https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`;
+    toggleBtn();
+    fetch(url)
+      .then(response => response.json())
+      .then(data => showImages(data.hits))
+      //error message
+      .catch(error => {
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('errorInputName').innerText = document.getElementById("search").value;
+
+      })
+  }
+
 }
 
 let slideIndex = 0;
@@ -65,9 +81,6 @@ const createSlider = () => {
   // hide image aria
   imagesArea.style.display = 'none';
   const duration = document.getElementById('duration').value;
-  // const sliderDuration = sliderDuration => {
-
-  // }
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -78,13 +91,16 @@ const createSlider = () => {
   })
   changeSlide(0)
   // slider duration time
-  if (duration > 1 || duration == '') {
+  if (duration >= 1 || duration == '') {
+    toggleBtn();
     timer = setInterval(function () {
       slideIndex++;
       changeSlide(slideIndex);
     }, duration || 1000);
-  } else {
-    confirm('Sorry, Cannot See the Slider Image Because of You type negative sign. If you want to see, click on the OK button. The slider will change every 1 second!');
+    toggleBtn();
+  }
+  else {
+    alert('Sorry, Cannot See the Slider Image Because of You type negative sign/Less than 1 second. If you want to see, click on the OK button. The slider will change every 1 second!');
     timer = setInterval(function () {
       slideIndex++;
       changeSlide(slideIndex);
@@ -119,9 +135,9 @@ const changeSlide = (index) => {
 }
 
 // Keyboard Enter Search Button
-let search = document.getElementById("search").addEventListener("keypress", function(event) {
-    // event.preventDefault();
-    if (event.key == 'Enter')
+let search = document.getElementById("search").addEventListener("keypress", function (event) {
+  // event.preventDefault();
+  if (event.key == 'Enter')
     searchBtn.click();
 });
 
@@ -131,8 +147,15 @@ searchBtn.addEventListener('click', function () {
   const search = document.getElementById('search');
   getImages(search.value)
   sliders.length = 0;
+  search.value = '';
 })
 
 sliderBtn.addEventListener('click', function () {
   createSlider()
 })
+
+//Data Loading Toggle Part
+const toggleBtn = () => {
+  const loadingSpinner = document.getElementById("dataLoad");
+  loadingSpinner.classList.toggle('invisible');
+}
