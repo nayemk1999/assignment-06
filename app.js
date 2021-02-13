@@ -67,7 +67,10 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  const duration = document.getElementById('duration').value;
+  // const sliderDuration = sliderDuration => {
+    
+  // }
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -77,12 +80,21 @@ const createSlider = () => {
     sliderContainer.appendChild(item)
   })
   changeSlide(0)
-  timer = setInterval(function () {
-    slideIndex++;
-    changeSlide(slideIndex);
-  }, duration);
+  // slider duration time
+  if(duration > 1){
+    timer = setInterval(function () {
+      slideIndex++;
+      changeSlide(slideIndex);
+    }, duration || 1000);
+  }else{
+    confirm('Sorry, Cannot See the Slider Image Because of You type negative sign. If you want to see, click on the OK button. The slider will change every 1 second!');
+    timer = setInterval(function () {
+      slideIndex++;
+      changeSlide(slideIndex);
+    },1000);
+  }
+  
 }
-
 // change slider index 
 const changeItem = index => {
   changeSlide(slideIndex += index);
