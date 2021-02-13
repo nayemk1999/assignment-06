@@ -69,7 +69,7 @@ const createSlider = () => {
   imagesArea.style.display = 'none';
   const duration = document.getElementById('duration').value;
   // const sliderDuration = sliderDuration => {
-    
+
   // }
   sliders.forEach(slide => {
     let item = document.createElement('div')
@@ -81,19 +81,19 @@ const createSlider = () => {
   })
   changeSlide(0)
   // slider duration time
-  if(duration > 1){
+  if (duration > 1 || duration == '') {
     timer = setInterval(function () {
       slideIndex++;
       changeSlide(slideIndex);
     }, duration || 1000);
-  }else{
+  } else {
     confirm('Sorry, Cannot See the Slider Image Because of You type negative sign. If you want to see, click on the OK button. The slider will change every 1 second!');
     timer = setInterval(function () {
       slideIndex++;
       changeSlide(slideIndex);
-    },1000);
+    }, 1000);
   }
-  
+
 }
 // change slider index 
 const changeItem = index => {
@@ -120,6 +120,13 @@ const changeSlide = (index) => {
 
   items[index].style.display = "block"
 }
+
+// Keyboard Enter Search Button
+let search = document.getElementById("search").addEventListener("keypress", function(event) {
+    // event.preventDefault();
+    if (event.key == 'Enter')
+    searchBtn.click();
+});
 
 searchBtn.addEventListener('click', function () {
   document.querySelector('.main').style.display = 'none';
